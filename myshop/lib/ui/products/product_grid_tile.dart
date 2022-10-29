@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../models/product.dart';
 import 'product_detail_screen.dart';
-import 'product_detail_screen.dart';
 
 class ProductGridTile extends StatelessWidget {
   const ProductGridTile(
@@ -23,7 +22,11 @@ class ProductGridTile extends StatelessWidget {
             Navigator.of(context).pushNamed(
               ProductDetailScreen.routeName,
               arguments: product.id,
+              //MaterialPageRoute(
+              //builder: (ctx) => ProductDetailScreen(product),
+              //),
             );
+            // print('Go to product detail screen');
           },
           child: Image.network(
             product.imageUrl,
@@ -36,14 +39,19 @@ class ProductGridTile extends StatelessWidget {
 
   Widget buildGridFooterBar(BuildContext context) {
     return GridTileBar(
-      backgroundColor: Colors.black87,
-      leading: IconButton(
-        icon: Icon(
-          product.isFavorite ? Icons.favorite : Icons.favorite_border,
-        ),
-        color: Theme.of(context).colorScheme.secondary,
-        onPressed: () {
-          print('Toggle a favorite product');
+      backgroundColor:Colors.black87,
+      leading: ValueListenableBuilder<bool>(
+        valueListenable: product.isFavoriteListenable,
+        builder: (ctx, isFavorite, child) {
+          return IconButton(
+            icon: Icon(
+              isFavorite ? Icons.favorite : Icons.favorite_border,
+            ),
+            color: Theme.of(context).colorScheme.secondary,
+            onPressed: () {
+              product.isFavorite = !isFavorite;
+            },
+          );
         },
       ),
       title: Text(
