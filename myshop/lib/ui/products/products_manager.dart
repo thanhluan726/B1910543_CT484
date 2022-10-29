@@ -50,3 +50,4 @@ class ProductsManager {
     return _items.where((prodItem) => prodItem.isFavorite).toList();
   }
 }
+
