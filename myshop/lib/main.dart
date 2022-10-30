@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:myshop/ui/cart/cart_manager.dart';
-import 'package:myshop/ui/orders/orders_manager.dart';
-import 'ui/products/products_manager.dart';
-import 'ui/products/user_products_screen.dart';
-import 'ui/products/product_detail_screen.dart';
-import 'ui/products/products_overview_screen.dart';
-import 'ui/cart/cart_screen.dart';
-import 'ui/orders/orders_screen.dart';
+import 'package:myshop/ui/orders/orders_screen.dart';
+import 'package:myshop/ui/products/edit_product_screen.dart';
+import 'package:myshop/ui/products/user_products_screen.dart';
 import 'package:provider/provider.dart';
-
+import 'ui/screens.dart';
+// import 'ui/products/product_detail_screen.dart';
+// import 'ui/products/products_manager.dart';
+// import 'ui/products/product_overview_screen.dart';
+// import 'ui/products/user_products_screen.dart';
+// import 'ui/cart/cart_screen.dart';
+// import 'ui/orders/orders_screen.dart';
 void main() {
   runApp(const MyApp());
 }
-
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
-  //
   @override
   Widget build(BuildContext context) {
-     return MultiProvider(
+    return MultiProvider(
       providers: [
         ChangeNotifierProvider(
           create: (ctx) => ProductsManager(),
@@ -27,69 +26,68 @@ class MyApp extends StatelessWidget {
           create: (ctx) => CartManager(),
         ),
         ChangeNotifierProvider(
-          create: (ctx)=> OrdersManager(),
+          create: (ctx) => OrdersManager(),
         ),
       ],
-      
-    child: MaterialApp(
-      title: 'My Shop',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Lato',
-        colorScheme: ColorScheme.fromSwatch(
-          primarySwatch: Colors.purple,
-        ).copyWith(
-          secondary: Colors.deepOrange,
-        ),
+      child: MaterialApp(
+        title: 'My Shop',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            fontFamily: 'Lato',
+            colorScheme:
+                ColorScheme.fromSwatch(primarySwatch: Colors.purple).copyWith(
+              secondary: Colors.deepOrange,
+            )),
+        home: const ProductsOverviewScreen(),
+        routes: {
+          CartScreen.routeName: (ctx) => const CartScreen(),
+          OrdersScreen.routeName: (ctx) => const OrdersScreen(),
+          UserProductsScreen.routeName: (ctx) => const UserProductsScreen(),
+        },
+        onGenerateRoute: (settings) {
+          if (settings.name == ProductDetailScreen.routeName) {
+            final productId = settings.arguments as String;
+            return MaterialPageRoute(
+              builder: (ctx) {
+                return ProductDetailScreen(
+                  ctx.read<ProductsManager>().findById(productId),
+                );
+              },
+            );
+          }
+
+          if (settings.name == EditProductScreen.routeName) {
+            final productId = settings.arguments as String?;
+            return MaterialPageRoute(
+              builder: (ctx) {
+                return EditProductScreen(
+                  productId != null ?
+                  ctx.read<ProductsManager>().findById(productId):null,
+                );
+              },
+            );
+          }
+          return null;
+        },
       ),
-      home: const ProductsOverviewScreen(),
-      routes: {
-        CartScreen.routeName: 
-        (ctx) => const CartScreen(),
-        OrdersScreen.routeName: 
-        (ctx) => const OrdersScreen(),
-        UserProductsScreen.routeName: 
-        (ctx) => const UserProductsScreen(),
-      },
-      onGenerateRoute: (settings) {
-        if (settings.name == ProductDetailScreen.routeName) {
-          final productId = settings.arguments as String;
-          return MaterialPageRoute(
-            builder: (ctx) {
-              return ProductDetailScreen(
-               ctx.read<ProductsManager>().findById(productId),
-              );
-            },
-          );
-        }
-        return null;
-      },
-    ),
     );
   }
 }
-
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
+  const MyHomePage({Key? key, required this.title}) : super(key: key);
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
   // how it looks.
-
   // This class is the configuration for the state. It holds the values (in this
   // case the title) provided by the parent (in this case the App widget) and
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
-
   final String title;
-
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
-
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
-
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -100,7 +98,6 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done

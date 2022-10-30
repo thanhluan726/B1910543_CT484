@@ -12,7 +12,6 @@ class UserProductListTile extends StatelessWidget {
     this.product, {
     super.key,
   });
-
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -31,7 +30,6 @@ class UserProductListTile extends StatelessWidget {
       ),
     );
   }
-
   Widget buildDeleteButton(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.delete),
@@ -51,11 +49,11 @@ class UserProductListTile extends StatelessWidget {
       color: Theme.of(context).errorColor,
     );
   }
-
   Widget buildEditButton(BuildContext context) {
     return IconButton(
       icon: const Icon(Icons.edit),
       onPressed: () {
+        print('Go to edit product screen');
         Navigator.of(context).pushNamed(
           EditProductScreen.routeName,
           arguments: product.id,
