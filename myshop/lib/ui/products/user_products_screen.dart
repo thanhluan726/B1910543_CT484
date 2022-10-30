@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../shared/app_drawer.dart';
 import 'user_product_list_tile.dart';
 import 'products_manager.dart';
+
 
 class UserProductsScreen extends StatelessWidget {
   static const routeName = '/user-products';
@@ -25,19 +27,22 @@ class UserProductsScreen extends StatelessWidget {
     );
   }
 
-  Widget buildUserProductListView(ProductsManager productsManager) {
-    return ListView.builder(
-      itemCount: productsManager.itemCount,
-      itemBuilder: (ctx, i) => Column(
-        children: [
-          UserProductListTile(
-            productsManager.items[i],
-          ),
-          const Divider(),
-        ],
-      ),
-    );
+  Widget buildUserProductListView(productsManager) {
+    return Consumer<ProductsManager>(builder: (ctx, productsManager, child) {
+      return ListView.builder(
+        itemCount: productsManager.itemCount,
+        itemBuilder: (ctx, i) => Column(
+          children: [
+            UserProductListTile(
+              productsManager.items[i],
+            ),
+            const Divider(),
+          ],
+        ),
+      );
+    });
   }
+
 
   Widget buildAddButton() {
     return IconButton(
