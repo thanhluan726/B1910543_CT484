@@ -26,4 +26,6 @@ class OrdersManager with ChangeNotifier {
           List<OrderItem> get orders {
             return [..._orders];
           }
+
+  void addOrder(List<CartItem> products, double totalAmount) {}
           }

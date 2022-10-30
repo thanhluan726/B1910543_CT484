@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:myshop/ui/cart/cart_manager.dart';
+import 'package:provider/provider.dart';
 
-import '../../models/cart_item.dart';
+import '../../../models/cart_item.dart';
 import '../shared/dialog_utils.dart';
 
 class CartItemCard extends StatelessWidget {
@@ -39,6 +41,7 @@ class CartItemCard extends StatelessWidget {
         );
       },
       onDismissed: (direction) {
+        context.read<CartManager>().removeItem(productId);
         print('Cart item dismissed');
       },
       child: buildItemCard(),
